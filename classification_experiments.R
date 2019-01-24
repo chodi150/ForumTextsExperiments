@@ -20,6 +20,7 @@ file2 <- "/datasets/haszysz_tfidf.csv"
 file3 <- "/datasets/bmw_glove.csv"
 file4 <- "/datasets/bmw_tfidf.csv"
 
+#Get results of folds with given parameters
 getAllFoldsXgb <- function(modxgb, nr, mx, eta, gamma,cb, mcw, ss) {
     all_folds <- modxgb$pred[modxgb$pred$nrounds == nr
     & modxgb$pred$max_depth == mx
@@ -31,7 +32,7 @@ getAllFoldsXgb <- function(modxgb, nr, mx, eta, gamma,cb, mcw, ss) {
     return(all_folds)
 }
 
-
+#Pick folds of svm result
 getAllFoldsSvm <- function(modxgb) {
     all_folds <- modxgb$pred
     return(all_folds)
@@ -56,7 +57,7 @@ drawPlot <- function(preds, obs, repr, color) {
 }
 
 
-### EXPERIMENTS CLASSIFICATION TF-IDF HASZYSZ
+#Classification TF-IDF haszysz
 data_frame <- read.csv(file = paste0(path, file2), header = TRUE, sep = ";")
 data_frame$X <- NULL
 classes <- data_frame$belongs_to
@@ -67,13 +68,15 @@ if (is.null(classes)) {
 classes <- make.names(classes)
 data_frame$belongs_to <- NULL
 
+#XGBoost
 ctrlxgb_tfidf <- trainControl(method = "cv", savePred = TRUE, classProb = TRUE, summaryFunction = mnLogLoss, verboseIter = TRUE, number = 5)
 modxgb_tfidf <- train(data_frame, classes, method = "xgbTree", metric = "logLoss", trControl = ctrlxgb_tfidf)
 
+#SVM
 ctrlsvm_tfidf <- trainControl(method = "cv", savePred = TRUE, classProb = TRUE, summaryFunction = twoClassSummary, verboseIter = TRUE, number = 5)
 modsvm_tfidf <- train(data_frame, classes, method = "svmLinear", trControl = ctrlsvm_tfidf)
 
-### EXPERIMENTS CLASSIFICATION GLOVE HASZYSZ
+#Classification GloVe haszysz
 data_frame <- read.csv(file = paste0(path, file1), header = TRUE, sep = ";")
 data_frame$X <- NULL
 classes <- data_frame$belongs_to
@@ -83,15 +86,15 @@ if (is.null(classes)) {
 }
 classes <- make.names(classes)
 data_frame$belongs_to <- NULL
-
+#XGBoost
 ctrlxgb_glove <- trainControl(method = "cv", savePred = TRUE, classProb = TRUE, summaryFunction = mnLogLoss, verboseIter = TRUE, number = 5)
 modxgb_glove <- train(data_frame, classes, method = "xgbTree", metric = "logLoss", trControl = ctrlxgb_glove)
-
+#SVM
 ctrlsvm_glove <- trainControl(method = "cv", savePred = TRUE, classProb = TRUE, summaryFunction = twoClassSummary, verboseIter = TRUE, number = 5)
 modsvm_glove <- train(data_frame, classes, method = "svmLinear", trControl = ctrlsvm_glove)
 
 
-### EXPERIMENTS CLASSIFICATION GLOVE BMW
+# Classification GloVe BMW
 data_frame <- read.csv(file = paste0(path, file3), header = TRUE, sep = ";")
 data_frame$X <- NULL
 classes <- data_frame$belongs_to
@@ -102,15 +105,15 @@ if (is.null(classes)) {
 classes <- make.names(classes)
 data_frame$belongs_to <- NULL
 
-
+#XGBoost
 ctrlxgb_glove_bmw <- trainControl(method = "cv", savePred = TRUE, classProb = TRUE, summaryFunction = mnLogLoss, verboseIter = TRUE, number = 5)
 modxgb_glove_bmw <- train(data_frame, classes, method = "xgbTree", metric = "logLoss", trControl = ctrlxgb_glove_bmw)
 
-
+#SVM
 ctrlsvm_glove_bmw <- trainControl(method = "cv", savePred = TRUE, classProb = TRUE, summaryFunction = twoClassSummary, verboseIter = TRUE, number = 5)
-modsvm_glove_bmw <- train(data_frame, classes, method = "svmLinear", trControl = ctrlsvm_glove)
+modsvm_glove_bmw <- train(data_frame, classes, method = "svmLinear", trControl = ctrlsvm_glove_bmw)
 
-
+# Classificaton TF-IDF BMW
 data_frame <- read.csv(file = paste0(path, file4), header = TRUE, sep = ";")
 data_frame$X <- NULL
 classes <- data_frame$belongs_to
@@ -121,11 +124,13 @@ if (is.null(classes)) {
 classes <- make.names(classes)
 data_frame$belongs_to <- NULL
 
-### EXPERIMENTS CLASSIFICATION TF-IDF BMW
+### XGBoost
 ctrlxgb_tfidf_bmw <- trainControl(method = "cv", savePred = TRUE, classProb = TRUE, summaryFunction = mnLogLoss, verboseIter = TRUE, number = 5)
 modxgb_tfidf_bmw <- train(data_frame, classes, method = "xgbTree", metric = "logLoss", trControl = ctrlxgb_tfidf_bmw)
 
-
+### SVM unsuccessfull attempt - too long execution time
+ctrlsvm_tfidf_bmw <- trainControl(method = "cv", savePred = TRUE, classProb = TRUE, summaryFunction = twoClassSummary, verboseIter = TRUE, number = 5)
+modsvm_tfidf_bmw <- train(data_frame, classes, method = "svmLinear", trControl = ctrlsvm_tfidf_bmw)
 
 
 #PLOTS FOR HASZYSZ
