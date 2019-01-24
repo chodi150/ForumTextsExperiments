@@ -22,14 +22,15 @@ file4 <- "/datasets/bmw_tfidf.csv"
 charts_path <- paste0(path,"/charts/")
 silhouette_filename <- "silhouette.png"
 points_clusters_filename <- "points.png"
-desired_attempt_size <- 4000
+desired_attempt_size <- 200
 krange <- 2:15
 
 
 prepareDataFrame <- function(path) {
     data_frame <- read.csv(file = path, header = TRUE, sep = ";")
     data_frame$X <- NULL
-    data_frame$belongs_to <- NULL
+    data_frame$category <- NULL
+    classes <- data_frame$belongs_to <- NULL
     return (data_frame)
 }
 
@@ -151,6 +152,7 @@ performClustering <- function(data_frame, classes, niter, desired_attempt_size, 
     names(result) <- c("rands_pam", "sili_infos_pam", "rands_hac", "sili_infos_hac")
     return(result)
 }
+
 printClusterStats <- function(results) {
     print("PAM:")
     print(paste("avg rand", mean(unlist(results$rands_pam))))
@@ -169,8 +171,8 @@ printSilhouette <- function(sils) {
     for (i in 1:length(sils)) {
         avgs <- list.append(avgs, sils[[i]]$avg.width)
     }
-    print(mean(unlist(avgs)))
-    print(sd(unlist(avgs)))
+    print(paste("Avg silhouette", mean(unlist(avgs))))
+    print(paste("Sd silhouette", sd(unlist(avgs))))
 }
 
 ## Determining k for each dataset
@@ -220,7 +222,7 @@ plotAvgSilh(bmw_tfidf1, bmw_tfidf2, bmw_tfidf2, 1)
 result <- prepareDataFrameAndClasses(paste0(path, file1))
 data_frame <- result$df
 classes <- result$classes
-clus_data <- performClustering(data_frame, classes, 10, 4000)
+clus_data <- performClustering(data_frame, classes, 10, 4000,2)
 clus_glove_hasz <- clus_data
 printClusterStats(clus_glove_hasz)
 
