@@ -15,10 +15,10 @@ library(factoextra)
 library(rlist)
 
 path <- getwd()
-file1 <- "/forum_haszysz/glove_window_size_5_vec_dim_100_pruned_haszysz_WAZONE_TF11-01-2019-16-19.csv"
-file2 <- "/forum_haszysz/dict_size_807_tfidf_haszyszdobry12-01-2019-17-49.csv"
-file3 <- "/forum_bmw/glove_window_size_5_vec_dim_100_PRUNED_BMW_0_5_PROC_POS11-01-2019-17-07.csv"
-file4 <- "/forum_bmw/dict_size_913_tfidf_pruned_BMW_tfidf12-01-2019-03-28.csv"
+file1 <- "/datasets/haszysz_glove.csv"
+file2 <- "/datasets/haszysz_tfidf.csv"
+file3 <- "/datasets/bmw_glove.csv"
+file4 <- "/forum_bmw/bmw_tfidf.csv"
 charts_path <- paste0(path,"/charts/")
 silhouette_filename <- "silhouette.png"
 points_clusters_filename <- "points.png"
@@ -29,7 +29,6 @@ krange <- 2:15
 prepareDataFrame <- function(path) {
     data_frame <- read.csv(file = path, header = TRUE, sep = ";")
     data_frame$X <- NULL
-   # classes <- data_frame$belongs_to
     data_frame$belongs_to <- NULL
     return (data_frame)
 }
@@ -55,7 +54,6 @@ performClusteringPAM <- function(data_frame, range_k, attempt_size, folder_name)
 
     attempt_index <- sample(index, trunc(length(index) / division_param))
     data_frame_attempt <- data_frame[attempt_index,]
-   # classes_attempt <- classes[attempt_index]
 
     dist.matrix = proxy::dist(data_frame_attempt, method = "cosine")
 
@@ -211,15 +209,14 @@ write_results_to_csv(bmw_tfidf2, paste0(charts_path, "/bmw/tf2/"))
 write_results_to_csv(bmw_tfidf3, paste0(charts_path, "/bmw/tf3/"))
 
 
-
+#Plotting average silhouettes for determining k procedure
 plotAvgSilh(hasz_glove1, hasz_glove2, hasz_glove3,1)
 plotAvgSilh(bmw_glove1, bmw_glove2, bmw_glove3, 1)
 plotAvgSilh(hasz_tfidf1, hasz_tfidf2, hasz_tfidf2, 1)
 plotAvgSilh(bmw_tfidf1, bmw_tfidf2, bmw_tfidf2, 1)
 
 
-# Test execution for determined k's
-
+# Test execution for determined k's - haszysz GloVe
 result <- prepareDataFrameAndClasses(paste0(path, file1))
 data_frame <- result$df
 classes <- result$classes
@@ -228,19 +225,21 @@ clus_glove_hasz <- clus_data
 printClusterStats(clus_glove_hasz)
 
 
-
+# Test execution for determined k's - haszysz TF-IDF
 result <- prepareDataFrameAndClasses(paste0(path, file2))
 data_frame <- result$df
 classes <- result$classes
 clus_tfidf_hasz <- performClustering(data_frame, classes, 10, 4000,15)
 printClusterStats(clus_tfidf_hasz)
 
+# Test execution for determined k's -BMW GloVe
 result <- prepareDataFrameAndClasses(paste0(path, file3))
 data_frame <- result$df
 classes <- result$classes
 clus_glove_bmw <- performClustering(data_frame, classes, 10, 4000, 3)
 printClusterStats(clus_glove_bmw)
 
+# Test execution for determined k's - BMW TF-IDF
 result <- prepareDataFrameAndClasses(paste0(path, file4))
 data_frame <- result$df
 classes <- result$classes
