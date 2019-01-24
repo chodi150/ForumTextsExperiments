@@ -18,7 +18,7 @@ path <- getwd()
 file1 <- "/datasets/haszysz_glove.csv"
 file2 <- "/datasets/haszysz_tfidf.csv"
 file3 <- "/datasets/bmw_glove.csv"
-file4 <- "/forum_bmw/bmw_tfidf.csv"
+file4 <- "/datasets/bmw_tfidf.csv"
 charts_path <- paste0(path,"/charts/")
 silhouette_filename <- "silhouette.png"
 points_clusters_filename <- "points.png"

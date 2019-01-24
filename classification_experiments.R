@@ -15,10 +15,10 @@ library(factoextra)
 library(rlist)
 
 path <- getwd()
-file1 <- "/forum_haszysz/glove_window_size_5_vec_dim_100_pruned_haszysz_WAZONE_TF11-01-2019-16-19.csv"
-file2 <- "/forum_haszysz/dict_size_807_tfidf_haszyszdobry12-01-2019-17-49.csv"
-file3 <- "/forum_bmw/glove_window_size_5_vec_dim_100_PRUNED_BMW_0_5_PROC_POS11-01-2019-17-07.csv"
-file4 <- "/forum_bmw/dict_size_913_tfidf_pruned_BMW_tfidf12-01-2019-03-28.csv"
+file1 <- "/datasets/haszysz_glove.csv"
+file2 <- "/datasets/haszysz_tfidf.csv"
+file3 <- "/datasets/bmw_glove.csv"
+file4 <- "/datasets/bmw_tfidf.csv"
 
 getAllFoldsXgb <- function(modxgb, nr, mx, eta, gamma,cb, mcw, ss) {
     all_folds <- modxgb$pred[modxgb$pred$nrounds == nr
